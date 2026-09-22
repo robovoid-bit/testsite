@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro OS Portfolio</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            background-color: #008080; /* Classic Win95 Teal */
+            font-size: 14px;
+        }
+        
+        /* Retro 3D Border Effects */
+        .outset-border {
+            border: 2px solid;
+            border-color: #fff #808080 #808080 #fff;
+            box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #0a0a0a;
+        }
+        .inset-border {
+            border: 2px solid;
+            border-color: #808080 #fff #fff #808080;
+            background: #fff;
+        }
+
+        /* Desktop Space */
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 40px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        /* Icons */
+        .icon-shortcut {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            color: #fff;
+        }
+        .icon-image {
+            width: 40px;
+            height: 40px;
+            background: #dfdfdf;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .icon-text {
+            font-size: 12px;
+            background: transparent;
+            padding: 2px 4px;
+        }
+        .icon-shortcut:focus .icon-text, .icon-shortcut:active .icon-text {
+            background: #000080;
+            outline: 1px dotted #fff;
+        }
+
+        /* Windows Architecture */
+        .window {
+            position: absolute;
+            width: 400px;
+            background: #dfdfdf;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+        }
+        .window-header {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: #fff;
+            padding: 4px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            cursor: move;
+        }
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .close-btn {
+            width: 16px;
+            height: 16px;
+            background: #dfdfdf;
+            color: #000;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .close-btn:active {
+            border-color: #808080 #fff #fff #808080;
+            padding-top: 2px;
+            padding-left: 2px;
+        }
+        .window-body {
+            padding: 15px;
+            margin: 4px;
+            min-height: 150px;
+            overflow-y: auto;
+            color: #000;
+        }
+
+        /* Taskbar styling */
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: #dfdfdf;
+            display: flex;
+            align-items: center;
+            padding: 2px 10px;
+            z-index: 100;
+            justify-content: space-between;
+        }
+        .start-btn {
+            background: #dfdfdf;
+            font-weight: bold;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .start-btn:active {
+            border-color: #808080 #fff #fff #808080;
+        }
+        .sys-clock {
+            padding: 4px 10px;
+            background: #dfdfdf;
+            font-size: 12px;
+        }
+
+        /* Start Menu popover */
+        .start-menu {
+            position: absolute;
+            bottom: 42px;
+            left: 5px;
+            width: 200px;
+            background: #dfdfdf;
+            display: none;
+            flex-direction: column;
+            z-index: 200;
+        }
+        .start-menu-sidebar {
+            width: 30px;
+            background: linear-gradient(180deg, #000080, #1084d0);
+            color: #fff;
+            transform: rotate(180deg);
+            writing-mode: vertical-rl;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px 0;
+            font-size: 16px;
+        }
+        .start-menu-container {
+            display: flex;
+            width: 100%;
+        }
+        .start-menu-links {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .start-menu-item {
+            padding: 10px;
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .start-menu-item:hover {
+            background: #000080;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- OS Desktop -->
+    <main class="desktop" id="desktop">
+        
+        <!-- Icons -->
+        <div class="icon-shortcut" tabindex="0" ondblclick="openWindow('window-bio')">
+            <div class="icon-image outset-border">📝</div>
+            <div class="icon-text">Bio.txt</div>
+        </div>
+
+        <div class="icon-shortcut" tabindex="0" ondblclick="openWindow('window-projects')">
+            <div class="icon-image outset-border">📁</div>
+            <div class="icon-text">Projects</div>
+        </div>
+
+        <div class="icon-shortcut" tabindex="0" ondblclick="openWindow('window-trash')">
+            <div class="icon-image outset-border">🗑️</div>
+            <div class="icon-text">Trash Can</div>
+        </div>
+
+        <!-- Window: Bio -->
+        <div id="window-bio" class="window outset-border" style="top: 10%; left: 15%;">
+            <div class="window-header" onmousedown="dragStart(event, 'window-bio')">
+                <div class="window-title">📝 Bio.txt - Notepad</div>
+                <div class="close-btn outset-border" onclick="closeWindow('window-bio')">X</div>
+            </div>
+            <div class="window-body inset-border">
+                <strong>User Profile: Developer v1.0</strong><br><br>
+                I am a web engineering enthusiast obsessed with vintage digital spaces, semantic layouts, and snappy user interfaces.<br><br>
+                "Bringing the 90s back, one DOM element at a time."
+            </div>
+        </div>
+
+        <!-- Window: Projects -->
+        <div id="window-projects" class="window outset-border" style="top: 20%; left: 25%;">
+            <div class="window-header" onmousedown="dragStart(event, 'window-projects')">
+                <div class="window-title">📁 Projects</div>
+                <div class="close-btn outset-border" onclick="closeWindow('window-projects')">X</div>
+            </div>
+            <div class="window-body inset-border">
+                <p>Select an executable program to launch:</p>
+                <ul>
+                    <li><a href="#" style="color:#000080">HyperText_Portfolio.exe</a></li>
+                    <li><a href="#" style="color:#000080">Retro_CSS_Engine.bat</a></li>
+                    <li><a href="#" style="color:#000080">Vanilla_JS_Games.dmg</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Window: Trash -->
+        <div id="window-trash" class="window outset-border" style="top: 30%; left: 35%;">
+            <div class="window-header" onmousedown="dragStart(event, 'window-trash')">
+                <div class="window-title">🗑️ Trash Can</div>
+                <div class="close-btn outset-border" onclick="closeWindow('window-trash')">X</div>
+            </div>
+            <div class="window-body inset-border">
+                <p><strong>Recycled Garbage Items:</strong></p>
+                <del>• Pop-up Ads</del><br>
+                <del>• Dial-up internet disconnection sound</del><br>
+                <del>• Unsemantic &lt;div&gt; soup layouts</del><br><br>
+                <em>"Error 404: Wisdom not found in trash."</em>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Taskbar -->
+    <footer class="taskbar outset-border">
+        <div style="position: relative; display: flex; align-items: center;">
+            <button class="start-btn outset-border" onclick="toggleStartMenu()">
+                <strong style="font-size:16px;">💾</strong> <span>Start</span>
+            </button>
+            
+            <!-- Start Menu Overlay -->
+            <div id="start-menu" class="start-menu outset-border">
+                <div class="start-menu-container">
+                    <div class="start-menu-sidebar">Windows95</div>
+                    <div class="start-menu-links">
+                        <a href="https://github.com" target="_blank" class="start-menu-item">🐙 GitHub</a>
+                        <a href="https://linkedin.com" target="_blank" class="start-menu-item">👔 LinkedIn</a>
+                        <a href="https://twitter.com" target="_blank" class="start-menu-item">🐦 Twitter/X</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sys-clock inset-border" id="clock">12:00 PM</div>
+    </footer>
+
+    <script>
+        // Open & Close System Windows
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'flex';
+            // Bring to front
+            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
+            win.style.zIndex = 99;
+        }
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Toggle Start Menu
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // Close menu if clicking desktop
+        document.getElementById('desktop').addEventListener('click', () => {
+            document.getElementById('start-menu').style.display = 'none';
+        });
+
+        // Window Draggability Engine
+        let activeWin = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function dragStart(e, id) {
+            if (e.button !== 0) return;
+            
+            activeWin = document.getElementById(id);
+            
+            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
+            activeWin.style.zIndex = 99;
+
+            offsetX = e.clientX - activeWin.offsetLeft;
+            offsetY = e.clientY - activeWin.offsetTop;
+
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+        }
+
+        function dragMove(e) {
+            if (!activeWin) return;
+            activeWin.style.left = (e.clientX - offsetX) + 'px';
+            activeWin.style.top = (e.clientY - offsetY) + 'px';
+        }
+
+        function dragEnd() {
+            activeWin = null;
+            document.removeEventListener('mousemove', dragMove);
+            document.removeEventListener('mouseup', dragEnd);
+        }
+
+        // Clock Update
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            document.getElementById('clock').textContent = hours + ':' + minutes + ' ' + ampm;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
