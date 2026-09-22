@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10-Minute CSS Art Studio</title>
+    <title>Rotating Art Studio</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,213 +13,451 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             height: 100vh;
-            background-color: #f0f2f5;
+            background-color: #121214;
+            color: #e1e1e6;
             overflow: hidden;
         }
 
         /* Sidebar Styling */
         .sidebar {
-            width: 90px;
+            width: 260px;
             background-color: #1e1e24;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
+            padding: 20px;
             gap: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
             z-index: 10;
+            overflow-y: auto;
         }
 
-        .tool-title {
-            color: #fff;
-            font-size: 10px;
+        .section-title {
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: -5px;
-            opacity: 0.7;
+            letter-spacing: 1.5px;
+            color: #8257e5;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        /* Color Squares */
-        .color-box {
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #29292e;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        /* Brush Types & Mode Buttons */
+        .btn-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-mode {
+            flex: 1;
+            background: #323238;
+            border: 2px solid transparent;
+            color: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-mode:hover {
+            background: #41414c;
+        }
+
+        .btn-mode.active {
+            background: #8257e5;
+            border-color: #a370f7;
+        }
+
+        /* Color Picker Controls */
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
             width: 45px;
             height: 45px;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 2px solid transparent;
+            background: none;
         }
 
-        .color-box:hover {
-            transform: scale(1.1);
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
         }
 
-        .color-box.active {
-            border-color: #ffffff;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
-            transform: scale(1.05);
+        input[type="color"]::-webkit-color-swatch {
+            border: 2px solid #fff;
+            border-radius: 6px;
         }
 
-        /* Utility Buttons */
-        .btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 8px;
-            background-color: #33333a;
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
+        .color-val {
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        /* Slider Styles */
+        label {
+            font-size: 12px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.2s, transform 0.1s;
+            justify-content: space-between;
+            color: #a8a8b3;
         }
 
-        .btn:hover {
-            background-color: #44444f;
+        input[type="range"] {
+            width: 100%;
+            accent-color: #8257e5;
+            cursor: pointer;
         }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .btn.active {
-            background-color: #007bff;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
-        }
-
+        /* Clear Button */
         .btn-clear {
             margin-top: auto;
-            background-color: #dc3545;
-            font-size: 12px;
+            background: #e0485c;
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 6px;
             font-weight: bold;
+            cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.2s;
         }
 
         .btn-clear:hover {
-            background-color: #c82333;
+            background: #c93b4f;
         }
 
-        /* Canvas Area */
+        /* Canvas Workspace Wrapper */
         .canvas-container {
             flex-grow: 1;
             position: relative;
-            background-color: #ffffff;
+            background-color: #121214;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Outer rotatable container */
+        #rotationWrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-origin: center center;
         }
 
         canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             cursor: crosshair;
+            display: block;
+        }
+
+        /* Anchor point indicating rotation axis center */
+        .center-pivot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #e0485c;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            box-shadow: 0 0 8px rgba(224, 72, 92, 0.8);
+            z-index: 5;
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Tools -->
+    <!-- Configuration Options -->
     <div class="sidebar">
-        <div class="tool-title">Palette</div>
-        <div class="color-box active" style="background-color: #ff4757;" data-color="#ff4757"></div>
-        <div class="color-box" style="background-color: #2ed573;" data-color="#2ed573"></div>
-        <div class="color-box" style="background-color: #1e90ff;" data-color="#1e90ff"></div>
-        <div class="color-box" style="background-color: #ffa502;" data-color="#ffa502"></div>
+        <div>
+            <div class="section-title">Brush Style</div>
+            <div class="control-group">
+                <div class="btn-row">
+                    <button class="btn-mode active" id="penModeBtn">🖊️ Pen</button>
+                    <button class="btn-mode" id="blockModeBtn">⏹️ Block</button>
+                </div>
+            </div>
+        </div>
 
-        <div class="tool-title">Tools</div>
-        <button class="btn" id="eraser-btn" title="Eraser">🧽</button>
+        <div>
+            <div class="section-title">Colour Settings</div>
+            <div class="control-group">
+                <div class="btn-row">
+                    <button class="btn-mode active" id="drawToolBtn">Draw</button>
+                    <button class="btn-mode" id="eraserToolBtn">Eraser</button>
+                </div>
+                <div class="color-picker-wrapper" id="colorPickerWrapper">
+                    <input type="color" id="colorPalette" value="#8257e5">
+                    <span class="color-val" id="colorValue">#8257e5</span>
+                </div>
+            </div>
+        </div>
 
-        <button class="btn btn-clear" id="clear-btn" title="Clear Canvas">Clear</button>
+        <div>
+            <div class="section-title">Brush Sizing</div>
+            <div class="control-group">
+                <label for="brushSize">Size: <span id="sizeVal">8px</span></label>
+                <input type="range" id="brushSize" min="2" max="100" value="8">
+            </div>
+        </div>
+
+        <div>
+            <div class="section-title">Rotation Dynamics</div>
+            <div class="control-group">
+                <label for="rotSpeed">Speed: <span id="speedVal">0°/s</span></label>
+                <input type="range" id="rotSpeed" min="-180" max="180" value="0">
+                <button class="btn-mode" id="resetRotationBtn" style="margin-top: 5px; font-size: 11px; padding: 4px;">Stop Rotation</button>
+            </div>
+        </div>
+
+        <button class="btn-clear" id="clearBtn">Clear Workspace</button>
     </div>
 
-    <!-- Interactive Canvas -->
+    <!-- Artboard Zone -->
     <div class="canvas-container">
-        <canvas id="paintCanvas"></canvas>
+        <div id="rotationWrapper">
+            <canvas id="paintCanvas" width="590" height="590"></canvas>
+        </div>
+        <!-- Pivot Indicator Anchor Point always visually dead center -->
+        <div class="center-pivot"></div>
     </div>
 
     <script>
         const canvas = document.getElementById('paintCanvas');
         const ctx = canvas.getContext('2d');
-        const colorBoxes = document.querySelectorAll('.color-box');
-        const eraserBtn = document.getElementById('eraser-btn');
-        const clearBtn = document.getElementById('clear-btn');
+        const rotationWrapper = document.getElementById('rotationWrapper');
+        
+        // Element Inputs
+        const penModeBtn = document.getElementById('penModeBtn');
+        const blockModeBtn = document.getElementById('blockModeBtn');
+        const drawToolBtn = document.getElementById('drawToolBtn');
+        const eraserToolBtn = document.getElementById('eraserToolBtn');
+        const colorPalette = document.getElementById('colorPalette');
+        const colorValue = document.getElementById('colorValue');
+        const brushSizeInput = document.getElementById('brushSize');
+        const sizeVal = document.getElementById('sizeVal');
+        const rotSpeedInput = document.getElementById('rotSpeed');
+        const speedVal = document.getElementById('speedVal');
+        const resetRotationBtn = document.getElementById('resetRotationBtn');
+        const clearBtn = document.getElementById('clearBtn');
 
-        // Application State
+        // Configuration State
         let isDrawing = false;
         let lastX = 0;
         let lastY = 0;
-        let currentColor = '#ff4757';
-        let isEraserMode = false;
+        
+        let brushType = 'pen'; // 'pen' or 'block'
+        let currentTool = 'draw'; // 'draw' or 'eraser'
+        let currentColor = '#8257e5';
+        let brushSize = 8;
+        
+        let currentAngle = 0; 
+        let rotationSpeed = 0; // Degrees per second
+        let lastFrameTime = performance.now();
 
-        // Resize canvas to dynamically fit its parent container
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
+        // Canvas Setup & Sizing Boundaries
+        function initCanvas() {
+            // Keep drawing square and contained within dimensions nicely
+            const size = Math.min(canvas.parentElement.parentElement.clientWidth * 0.85, canvas.parentElement.parentElement.clientHeight * 0.85);
+            canvas.width = size;
+            canvas.height = size;
             
-            // Re-configure context styles after canvas resize as state resets
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.lineWidth = 8;
+            // Default canvas backdrop settings
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            updateBrushSettings();
         }
 
-        // Setup Drawing Logic & Event Handlers
+        function updateBrushSettings() {
+            ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+            ctx.fillStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+            ctx.lineWidth = brushSize;
+            
+            if (brushType === 'pen') {
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            } else {
+                ctx.lineCap = 'square';
+                ctx.lineJoin = 'miter';
+            }
+        }
+
+        // Transforms standard browser viewport space points into rotated internal localized matrix points
+        function getCanvasCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            
+            // Client mouse positions relative to canvas top-left bounding window
+            const clientX = e.clientX - rect.left;
+            const clientY = e.clientY - rect.top;
+            
+            // Find radius vectors extending from canvas center pivot point
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const dx = clientX - centerX;
+            const dy = clientY - centerY;
+            
+            // Reverse engineering transformation to map mouse vectors past current system angle
+            const rad = -currentAngle * Math.PI / 180;
+            const rotatedX = dx * Math.cos(rad) - dy * Math.sin(rad) + centerX;
+            const rotatedY = dx * Math.sin(rad) + dy * Math.cos(rad) + centerY;
+            
+            return { x: rotatedX, y: rotatedY };
+        }
+
+        // Drawing Action Triggers
+        function startDrawing(e) {
+            isDrawing = true;
+            const coords = getCanvasCoordinates(e);
+            lastX = coords.x;
+            lastY = coords.y;
+
+            // Handle discrete initial clicks instantly for block stamps
+            if (brushType === 'block') {
+                ctx.beginPath();
+                ctx.fillRect(coords.x - brushSize/2, coords.y - brushSize/2, brushSize, brushSize);
+            } else {
+                ctx.beginPath();
+                ctx.arc(coords.x, coords.y, brushSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
         function draw(e) {
             if (!isDrawing) return;
-
+            const coords = getCanvasCoordinates(e);
+            
+            updateBrushSettings();
             ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(e.offsetX, e.offsetY);
-            
-            // Set strokes based on active tool
-            ctx.strokeStyle = isEraserMode ? '#ffffff' : currentColor;
-            ctx.lineWidth = isEraserMode ? 40 : 8; // Thicker line for the eraser
-            
-            ctx.stroke();
-            
-            // Cache coordinates for the next move sequence
-            lastX = e.offsetX;
-            lastY = e.offsetY;
+
+            if (brushType === 'pen') {
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(coords.x, coords.y);
+                ctx.stroke();
+            } else {
+                // Connect blocks with continuous fills cleanly over velocity spaces
+                let steps = Math.max(Math.abs(coords.x - lastX), Math.abs(coords.y - lastY));
+                for (let i = 0; i < steps; i++) {
+                    let t = i / steps;
+                    let currX = lastX + (coords.x - lastX) * t;
+                    let currY = lastY + (coords.y - lastY) * t;
+                    ctx.fillRect(currX - brushSize/2, currY - brushSize/2, brushSize, brushSize);
+                }
+                ctx.fillRect(coords.x - brushSize/2, coords.y - brushSize/2, brushSize, brushSize);
+            }
+
+            lastX = coords.x;
+            lastY = coords.y;
         }
 
-        // Mouse Action Event Listeners
-        canvas.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            lastX = e.offsetX;
-            lastY = e.offsetY;
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Animation Frame Engine loop tracking rotational shifts cleanly
+        function updateRotationLoop(timestamp) {
+            const delta = (timestamp - lastFrameTime) / 1000; // time conversion delta
+            lastFrameTime = timestamp;
+
+            if (rotationSpeed !== 0) {
+                currentAngle += rotationSpeed * delta;
+                currentAngle %= 360;
+                rotationWrapper.style.transform = `rotate(${currentAngle}deg)`;
+            }
+
+            requestAnimationFrame(updateRotationLoop);
+        }
+
+        // Control Node Triggers & UI Interaction Events
+        penModeBtn.addEventListener('click', () => {
+            brushType = 'pen';
+            penModeBtn.classList.add('active');
+            blockModeBtn.classList.remove('active');
         });
 
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mouseout', () => isDrawing = false);
-
-        // Sidebar Control Listeners
-        colorBoxes.forEach(box => {
-            box.addEventListener('click', (e) => {
-                // Disable eraser mode
-                isEraserMode = false;
-                eraserBtn.classList.remove('active');
-
-                // Update active selection UI
-                colorBoxes.forEach(b => b.classList.remove('active'));
-                box.classList.add('active');
-
-                // Set current drawing color
-                currentColor = box.getAttribute('data-color');
-            });
+        blockModeBtn.addEventListener('click', () => {
+            brushType = 'block';
+            blockModeBtn.classList.add('active');
+            penModeBtn.classList.remove('active');
         });
 
-        eraserBtn.addEventListener('click', () => {
-            isEraserMode = true;
-            eraserBtn.classList.add('active');
-            colorBoxes.forEach(b => b.classList.remove('active'));
+        drawToolBtn.addEventListener('click', () => {
+            currentTool = 'draw';
+            drawToolBtn.classList.add('active');
+            eraserToolBtn.classList.remove('active');
+        });
+
+        eraserToolBtn.addEventListener('click', () => {
+            currentTool = 'eraser';
+            eraserToolBtn.classList.add('active');
+            drawToolBtn.classList.remove('active');
+        });
+
+        colorPalette.addEventListener('input', (e) => {
+            currentColor = e.target.value;
+            colorValue.textContent = currentColor.toUpperCase();
+            // Swap back over to draw automatically upon pick
+            currentTool = 'draw';
+            drawToolBtn.classList.add('active');
+            eraserToolBtn.classList.remove('active');
+        });
+
+        brushSizeInput.addEventListener('input', (e) => {
+            brushSize = parseInt(e.target.value);
+            sizeVal.textContent = brushSize + 'px';
+        });
+
+        rotSpeedInput.addEventListener('input', (e) => {
+            rotationSpeed = parseInt(e.target.value);
+            speedVal.textContent = rotationSpeed + '°/s';
+        });
+
+        resetRotationBtn.addEventListener('click', () => {
+            rotationSpeed = 0;
+            rotSpeedInput.value = 0;
+            speedVal.textContent = '0°/s';
+            currentAngle = 0;
+            rotationWrapper.style.transform = `rotate(0deg)`;
         });
 
         clearBtn.addEventListener('click', () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         });
 
-        // Initialize and listen to screen adjustments
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        // Pointer event mappings
+        canvas.addEventListener('mousedown', startDrawing);
+        window.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', stopDrawing);
+
+        // Window Initialization 
+        window.addEventListener('load', () => {
+            initCanvas();
+            requestAnimationFrame(updateRotationLoop);
+        });
     </script>
-</body>
-</html>
+
+
+</body></html>
