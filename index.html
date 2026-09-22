@@ -3,361 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro OS Portfolio</title>
+    <title>10-Minute CSS Art Studio</title>
     <style>
         * {
             box-sizing: border-box;
-            user-select: none;
-        }
-        body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #f0f2f5;
             overflow: hidden;
-            font-family: 'Courier New', Courier, monospace, sans-serif;
-            background-color: #008080; /* Classic Win95 Teal */
-            font-size: 14px;
-        }
-        
-        /* Retro 3D Border Effects */
-        .outset-border {
-            border: 2px solid;
-            border-color: #fff #808080 #808080 #fff;
-            box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #0a0a0a;
-        }
-        .inset-border {
-            border: 2px solid;
-            border-color: #808080 #fff #fff #808080;
-            background: #fff;
         }
 
-        /* Desktop Space */
-        .desktop {
-            position: relative;
-            width: 100%;
-            height: calc(100% - 40px);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            align-content: flex-start;
-            flex-wrap: wrap;
-        }
-
-        /* Icons */
-        .icon-shortcut {
-            width: 80px;
+        /* Sidebar Styling */
+        .sidebar {
+            width: 90px;
+            background-color: #1e1e24;
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            cursor: pointer;
-            color: #fff;
-        }
-        .icon-image {
-            width: 40px;
-            height: 40px;
-            background: #dfdfdf;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        .icon-text {
-            font-size: 12px;
-            background: transparent;
-            padding: 2px 4px;
-        }
-        .icon-shortcut:focus .icon-text, .icon-shortcut:active .icon-text {
-            background: #000080;
-            outline: 1px dotted #fff;
-        }
-
-        /* Windows Architecture */
-        .window {
-            position: absolute;
-            width: 400px;
-            background: #dfdfdf;
-            display: none;
-            flex-direction: column;
+            padding: 20px 0;
+            gap: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             z-index: 10;
         }
-        .window-header {
-            background: linear-gradient(90deg, #000080, #1084d0);
+
+        .tool-title {
             color: #fff;
-            padding: 4px 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            cursor: move;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: -5px;
+            opacity: 0.7;
         }
-        .window-title {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+
+        /* Color Squares */
+        .color-box {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
         }
-        .close-btn {
-            width: 16px;
-            height: 16px;
-            background: #dfdfdf;
-            color: #000;
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            font-weight: bold;
+
+        .color-box:hover {
+            transform: scale(1.1);
+        }
+
+        .color-box.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* Utility Buttons */
+        .btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            background-color: #33333a;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
             display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-        }
-        .close-btn:active {
-            border-color: #808080 #fff #fff #808080;
-            padding-top: 2px;
-            padding-left: 2px;
-        }
-        .window-body {
-            padding: 15px;
-            margin: 4px;
-            min-height: 150px;
-            overflow-y: auto;
-            color: #000;
+            align-items: center;
+            transition: background-color 0.2s, transform 0.1s;
         }
 
-        /* Taskbar styling */
-        .taskbar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: #dfdfdf;
-            display: flex;
-            align-items: center;
-            padding: 2px 10px;
-            z-index: 100;
-            justify-content: space-between;
+        .btn:hover {
+            background-color: #44444f;
         }
-        .start-btn {
-            background: #dfdfdf;
-            font-weight: bold;
-            padding: 4px 8px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
+
+        .btn:active {
+            transform: scale(0.95);
         }
-        .start-btn:active {
-            border-color: #808080 #fff #fff #808080;
+
+        .btn.active {
+            background-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
         }
-        .sys-clock {
-            padding: 4px 10px;
-            background: #dfdfdf;
+
+        .btn-clear {
+            margin-top: auto;
+            background-color: #dc3545;
             font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
 
-        /* Start Menu popover */
-        .start-menu {
-            position: absolute;
-            bottom: 42px;
-            left: 5px;
-            width: 200px;
-            background: #dfdfdf;
-            display: none;
-            flex-direction: column;
-            z-index: 200;
+        .btn-clear:hover {
+            background-color: #c82333;
         }
-        .start-menu-sidebar {
-            width: 30px;
-            background: linear-gradient(180deg, #000080, #1084d0);
-            color: #fff;
-            transform: rotate(180deg);
-            writing-mode: vertical-rl;
-            text-align: center;
-            font-weight: bold;
-            padding: 10px 0;
-            font-size: 16px;
-        }
-        .start-menu-container {
-            display: flex;
-            width: 100%;
-        }
-        .start-menu-links {
+
+        /* Canvas Area */
+        .canvas-container {
             flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+            position: relative;
+            background-color: #ffffff;
         }
-        .start-menu-item {
-            padding: 10px;
-            text-decoration: none;
-            color: #000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .start-menu-item:hover {
-            background: #000080;
-            color: #fff;
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
         }
     </style>
 </head>
 <body>
 
-    <!-- OS Desktop -->
-    <main class="desktop" id="desktop">
-        
-        <!-- Icons -->
-        <div class="icon-shortcut" tabindex="0" ondblclick="openWindow('window-bio')">
-            <div class="icon-image outset-border">📝</div>
-            <div class="icon-text">Bio.txt</div>
-        </div>
+    <!-- Sidebar Tools -->
+    <div class="sidebar">
+        <div class="tool-title">Palette</div>
+        <div class="color-box active" style="background-color: #ff4757;" data-color="#ff4757"></div>
+        <div class="color-box" style="background-color: #2ed573;" data-color="#2ed573"></div>
+        <div class="color-box" style="background-color: #1e90ff;" data-color="#1e90ff"></div>
+        <div class="color-box" style="background-color: #ffa502;" data-color="#ffa502"></div>
 
-        <div class="icon-shortcut" tabindex="0" ondblclick="openWindow('window-projects')">
-            <div class="icon-image outset-border">📁</div>
-            <div class="icon-text">Projects</div>
-        </div>
+        <div class="tool-title">Tools</div>
+        <button class="btn" id="eraser-btn" title="Eraser">🧽</button>
 
-        <div class="icon-shortcut" tabindex="0" ondblclick="openWindow('window-trash')">
-            <div class="icon-image outset-border">🗑️</div>
-            <div class="icon-text">Trash Can</div>
-        </div>
+        <button class="btn btn-clear" id="clear-btn" title="Clear Canvas">Clear</button>
+    </div>
 
-        <!-- Window: Bio -->
-        <div id="window-bio" class="window outset-border" style="top: 10%; left: 15%;">
-            <div class="window-header" onmousedown="dragStart(event, 'window-bio')">
-                <div class="window-title">📝 Bio.txt - Notepad</div>
-                <div class="close-btn outset-border" onclick="closeWindow('window-bio')">X</div>
-            </div>
-            <div class="window-body inset-border">
-                <strong>User Profile: Developer v1.0</strong><br><br>
-                I am a web engineering enthusiast obsessed with vintage digital spaces, semantic layouts, and snappy user interfaces.<br><br>
-                "Bringing the 90s back, one DOM element at a time."
-            </div>
-        </div>
-
-        <!-- Window: Projects -->
-        <div id="window-projects" class="window outset-border" style="top: 20%; left: 25%;">
-            <div class="window-header" onmousedown="dragStart(event, 'window-projects')">
-                <div class="window-title">📁 Projects</div>
-                <div class="close-btn outset-border" onclick="closeWindow('window-projects')">X</div>
-            </div>
-            <div class="window-body inset-border">
-                <p>Select an executable program to launch:</p>
-                <ul>
-                    <li><a href="#" style="color:#000080">HyperText_Portfolio.exe</a></li>
-                    <li><a href="#" style="color:#000080">Retro_CSS_Engine.bat</a></li>
-                    <li><a href="#" style="color:#000080">Vanilla_JS_Games.dmg</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Window: Trash -->
-        <div id="window-trash" class="window outset-border" style="top: 30%; left: 35%;">
-            <div class="window-header" onmousedown="dragStart(event, 'window-trash')">
-                <div class="window-title">🗑️ Trash Can</div>
-                <div class="close-btn outset-border" onclick="closeWindow('window-trash')">X</div>
-            </div>
-            <div class="window-body inset-border">
-                <p><strong>Recycled Garbage Items:</strong></p>
-                <del>• Pop-up Ads</del><br>
-                <del>• Dial-up internet disconnection sound</del><br>
-                <del>• Unsemantic &lt;div&gt; soup layouts</del><br><br>
-                <em>"Error 404: Wisdom not found in trash."</em>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Bottom Taskbar -->
-    <footer class="taskbar outset-border">
-        <div style="position: relative; display: flex; align-items: center;">
-            <button class="start-btn outset-border" onclick="toggleStartMenu()">
-                <strong style="font-size:16px;">💾</strong> <span>Start</span>
-            </button>
-            
-            <!-- Start Menu Overlay -->
-            <div id="start-menu" class="start-menu outset-border">
-                <div class="start-menu-container">
-                    <div class="start-menu-sidebar">Windows95</div>
-                    <div class="start-menu-links">
-                        <a href="https://github.com" target="_blank" class="start-menu-item">🐙 GitHub</a>
-                        <a href="https://linkedin.com" target="_blank" class="start-menu-item">👔 LinkedIn</a>
-                        <a href="https://twitter.com" target="_blank" class="start-menu-item">🐦 Twitter/X</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="sys-clock inset-border" id="clock">12:00 PM</div>
-    </footer>
+    <!-- Interactive Canvas -->
+    <div class="canvas-container">
+        <canvas id="paintCanvas"></canvas>
+    </div>
 
     <script>
-        // Open & Close System Windows
-        function openWindow(id) {
-            const win = document.getElementById(id);
-            win.style.display = 'flex';
-            // Bring to front
-            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
-            win.style.zIndex = 99;
-        }
-        function closeWindow(id) {
-            document.getElementById(id).style.display = 'none';
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorBoxes = document.querySelectorAll('.color-box');
+        const eraserBtn = document.getElementById('eraser-btn');
+        const clearBtn = document.getElementById('clear-btn');
+
+        // Application State
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let currentColor = '#ff4757';
+        let isEraserMode = false;
+
+        // Resize canvas to dynamically fit its parent container
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            
+            // Re-configure context styles after canvas resize as state resets
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = 8;
         }
 
-        // Toggle Start Menu
-        function toggleStartMenu() {
-            const menu = document.getElementById('start-menu');
-            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        // Setup Drawing Logic & Event Handlers
+        function draw(e) {
+            if (!isDrawing) return;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            
+            // Set strokes based on active tool
+            ctx.strokeStyle = isEraserMode ? '#ffffff' : currentColor;
+            ctx.lineWidth = isEraserMode ? 40 : 8; // Thicker line for the eraser
+            
+            ctx.stroke();
+            
+            // Cache coordinates for the next move sequence
+            lastX = e.offsetX;
+            lastY = e.offsetY;
         }
 
-        // Close menu if clicking desktop
-        document.getElementById('desktop').addEventListener('click', () => {
-            document.getElementById('start-menu').style.display = 'none';
+        // Mouse Action Event Listeners
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
         });
 
-        // Window Draggability Engine
-        let activeWin = null;
-        let offsetX = 0;
-        let offsetY = 0;
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
 
-        function dragStart(e, id) {
-            if (e.button !== 0) return;
-            
-            activeWin = document.getElementById(id);
-            
-            document.querySelectorAll('.window').forEach(w => w.style.zIndex = 10);
-            activeWin.style.zIndex = 99;
+        // Sidebar Control Listeners
+        colorBoxes.forEach(box => {
+            box.addEventListener('click', (e) => {
+                // Disable eraser mode
+                isEraserMode = false;
+                eraserBtn.classList.remove('active');
 
-            offsetX = e.clientX - activeWin.offsetLeft;
-            offsetY = e.clientY - activeWin.offsetTop;
+                // Update active selection UI
+                colorBoxes.forEach(b => b.classList.remove('active'));
+                box.classList.add('active');
 
-            document.addEventListener('mousemove', dragMove);
-            document.addEventListener('mouseup', dragEnd);
-        }
+                // Set current drawing color
+                currentColor = box.getAttribute('data-color');
+            });
+        });
 
-        function dragMove(e) {
-            if (!activeWin) return;
-            activeWin.style.left = (e.clientX - offsetX) + 'px';
-            activeWin.style.top = (e.clientY - offsetY) + 'px';
-        }
+        eraserBtn.addEventListener('click', () => {
+            isEraserMode = true;
+            eraserBtn.classList.add('active');
+            colorBoxes.forEach(b => b.classList.remove('active'));
+        });
 
-        function dragEnd() {
-            activeWin = null;
-            document.removeEventListener('mousemove', dragMove);
-            document.removeEventListener('mouseup', dragEnd);
-        }
+        clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
 
-        // Clock Update
-        function updateClock() {
-            const now = new Date();
-            let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            document.getElementById('clock').textContent = hours + ':' + minutes + ' ' + ampm;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        // Initialize and listen to screen adjustments
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
     </script>
 </body>
 </html>
