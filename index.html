@@ -1,463 +1,554 @@
-<html lang="en"><head>
+<html lang="en" class="light" crxlauncher-bridged="" crxlauncher=""><head>
     <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=ceb7e14d-31fd-4552-9cb9-d40b4d73b760
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotating Art Studio</title>
+    <title>Mtb Tuner</title>
+    <link rel="icon" type="image/png" href="https://png.pngtree.com/png-vector/20240628/ourmid/pngtree-mountain-bike-silhouette-mtb-png-image_12906095.png">
+    <script src="https://cdn.tailwindcss.com"></script><style></style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            height: 100vh;
-            background-color: #121214;
-            color: #e1e1e6;
-            overflow: hidden;
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            width: 260px;
-            background-color: #1e1e24;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            gap: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-            overflow-y: auto;
-        }
-
-        .section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #8257e5;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #29292e;
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        /* Brush Types & Mode Buttons */
-        .btn-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-mode {
-            flex: 1;
-            background: #323238;
-            border: 2px solid transparent;
-            color: #fff;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .btn-mode:hover {
-            background: #41414c;
-        }
-
-        .btn-mode.active {
-            background: #8257e5;
-            border-color: #a370f7;
-        }
-
-        /* Color Picker Controls */
-        .color-picker-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        input[type="color"] {
-            -webkit-appearance: none;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 6px;
-            cursor: pointer;
-            background: none;
-        }
-
-        input[type="color"]::-webkit-color-swatch-wrapper {
-            padding: 0;
-        }
-
-        input[type="color"]::-webkit-color-swatch {
-            border: 2px solid #fff;
-            border-radius: 6px;
-        }
-
-        .color-val {
-            font-family: monospace;
-            font-size: 14px;
-        }
-
-        /* Slider Styles */
-        label {
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-            color: #a8a8b3;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            accent-color: #8257e5;
-            cursor: pointer;
-        }
-
-        /* Clear Button */
-        .btn-clear {
-            margin-top: auto;
-            background: #e0485c;
-            border: none;
-            color: #fff;
-            padding: 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background 0.2s;
-        }
-
-        .btn-clear:hover {
-            background: #c93b4f;
-        }
-
-        /* Canvas Workspace Wrapper */
-        .canvas-container {
-            flex-grow: 1;
-            position: relative;
-            background-color: #121214;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Outer rotatable container */
-        #rotationWrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-origin: center center;
-        }
-
-        canvas {
-            background-color: #ffffff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            cursor: crosshair;
-            display: block;
-        }
-
-        /* Anchor point indicating rotation axis center */
-        .center-pivot {
-            position: absolute;
+        ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
-            background-color: #e0485c;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            box-shadow: 0 0 8px rgba(224, 72, 92, 0.8);
-            z-index: 5;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
         }
     </style>
-</head>
-<body>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.relative{position:relative}.right-4{right:1rem}.top-4{top:1rem}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-20{margin-right:5rem}.mb-1\.5{margin-bottom:0.375rem}.mb-8{margin-bottom:2rem}.mb-1{margin-bottom:0.25rem}.block{display:block}.flex{display:flex}.hidden{display:none}.h-full{height:100%}.max-h-\[380px\]{max-height:380px}.min-h-\[680px\]{min-height:680px}.min-h-screen{min-height:100vh}.w-full{width:100%}.w-24{width:6rem}.max-w-\[600px\]{max-width:600px}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded{border-radius:0.25rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-slate-500{--tw-bg-opacity:1;background-color:rgb(100 116 139 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-1{padding:0.25rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.pt-6{padding-top:1.5rem}.pr-1{padding-right:0.25rem}.pt-4{padding-top:1rem}.text-center{text-align:center}.text-xs{font-size:0.75rem;line-height:1rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.italic{font-style:italic}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-200{transition-duration:200ms}.file\:mr-4::file-selector-button{margin-right:1rem}.file\:rounded-lg::file-selector-button{border-radius:0.5rem}.file\:border-0::file-selector-button{border-width:0px}.file\:bg-blue-50::file-selector-button{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.file\:px-3::file-selector-button{padding-left:0.75rem;padding-right:0.75rem}.file\:py-1::file-selector-button{padding-top:0.25rem;padding-bottom:0.25rem}.file\:text-xs::file-selector-button{font-size:0.75rem;line-height:1rem}.file\:font-semibold::file-selector-button{font-weight:600}.file\:text-blue-700::file-selector-button{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.hover\:file\:bg-blue-100::file-selector-button:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.focus\:border-blue-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105 / var(--tw-border-opacity, 1))}.dark\:border-slate-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:text-slate-500:is(.dark *){--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.dark\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.dark\:file\:bg-slate-700:is(.dark *)::file-selector-button{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:file\:text-slate-200:is(.dark *)::file-selector-button{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:hover\:bg-slate-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}</style></head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex items-center justify-center p-4 transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100">
 
-    <!-- Configuration Options -->
-    <div class="sidebar">
-        <div>
-            <div class="section-title">Brush Style</div>
-            <div class="control-group">
-                <div class="btn-row">
-                    <button class="btn-mode active" id="penModeBtn">🖊️ Pen</button>
-                    <button class="btn-mode" id="blockModeBtn">⏹️ Block</button>
+    <div class="w-full max-w-[600px] min-h-[680px] bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-between relative">
+        
+        <div class="absolute top-4 right-4 z-50">
+            <button onclick="toggleThemeMode()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 text-xs font-bold px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 transition-colors cursor-pointer">
+                &amp;#127762; Toggle Theme
+            </button>
+        </div>
+
+        <div id="app-content" class="flex-1 flex flex-col justify-between pt-6">
+                <div class="flex flex-col h-full flex-1 justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white">Your Bike Garage</h3>
+                            <div>
+                                <button onclick="showEditProfilePage()" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1.5 rounded transition-colors mr-20">Edit Profile</button>
+                            </div>
+                        </div>
+                        
+                        <div class="overflow-y-auto max-h-[380px] pr-1 mb-4">
+                            
+                    <div class="flex flex-col items-center justify-center py-20 text-center">
+                        <p class="text-sm italic text-slate-400 dark:text-slate-500">Your garage is empty. Add a bike to view tuning configs!</p>
+                    </div>
+                
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button onclick="showAddBikePage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition-colors">+ Add New Bike</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div>
-            <div class="section-title">Colour Settings</div>
-            <div class="control-group">
-                <div class="btn-row">
-                    <button class="btn-mode active" id="drawToolBtn">Draw</button>
-                    <button class="btn-mode" id="eraserToolBtn">Eraser</button>
-                </div>
-                <div class="color-picker-wrapper" id="colorPickerWrapper">
-                    <input type="color" id="colorPalette" value="#8257e5">
-                    <span class="color-val" id="colorValue">#8257e5</span>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="section-title">Brush Sizing</div>
-            <div class="control-group">
-                <label for="brushSize">Size: <span id="sizeVal">8px</span></label>
-                <input type="range" id="brushSize" min="2" max="100" value="8">
-            </div>
-        </div>
-
-        <div>
-            <div class="section-title">Rotation Dynamics</div>
-            <div class="control-group">
-                <label for="rotSpeed">Speed: <span id="speedVal">0°/s</span></label>
-                <input type="range" id="rotSpeed" min="-180" max="180" value="0">
-                <button class="btn-mode" id="resetRotationBtn" style="margin-top: 5px; font-size: 11px; padding: 4px;">Stop Rotation</button>
-            </div>
-        </div>
-
-        <button class="btn-clear" id="clearBtn">Clear Workspace</button>
-    </div>
-
-    <!-- Artboard Zone -->
-    <div class="canvas-container">
-        <div id="rotationWrapper">
-            <canvas id="paintCanvas" width="590" height="590"></canvas>
-        </div>
-        <!-- Pivot Indicator Anchor Point always visually dead center -->
-        <div class="center-pivot"></div>
     </div>
 
     <script>
-        const canvas = document.getElementById('paintCanvas');
-        const ctx = canvas.getContext('2d');
-        const rotationWrapper = document.getElementById('rotationWrapper');
+        const STORAGE_KEY = "mtb_suspension_app_data_v2";
         
-        // Element Inputs
-        const penModeBtn = document.getElementById('penModeBtn');
-        const blockModeBtn = document.getElementById('blockModeBtn');
-        const drawToolBtn = document.getElementById('drawToolBtn');
-        const eraserToolBtn = document.getElementById('eraserToolBtn');
-        const colorPalette = document.getElementById('colorPalette');
-        const colorValue = document.getElementById('colorValue');
-        const brushSizeInput = document.getElementById('brushSize');
-        const sizeVal = document.getElementById('sizeVal');
-        const rotSpeedInput = document.getElementById('rotSpeed');
-        const speedVal = document.getElementById('speedVal');
-        const resetRotationBtn = document.getElementById('resetRotationBtn');
-        const clearBtn = document.getElementById('clearBtn');
+        let user_data = {
+            onboarding_complete: false,
+            age: "16",
+            weight_value: 75,
+            weight_unit: "kg",
+            bikes: []
+        };
 
-        // Configuration State
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        
-        let brushType = 'pen'; // 'pen' or 'block'
-        let currentTool = 'draw'; // 'draw' or 'eraser'
-        let currentColor = '#8257e5';
-        let brushSize = 8;
-        
-        let currentAngle = 0; 
-        let rotationSpeed = 0; // Degrees per second
-        let lastFrameTime = performance.now();
-
-        // Canvas Setup & Sizing Boundaries
-        function initCanvas() {
-            // Keep drawing square and contained within dimensions nicely
-            const size = Math.min(canvas.parentElement.parentElement.clientWidth * 0.85, canvas.parentElement.parentElement.clientHeight * 0.85);
-            canvas.width = size;
-            canvas.height = size;
-            
-            // Default canvas backdrop settings
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            updateBrushSettings();
-        }
-
-        function updateBrushSettings() {
-            ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
-            ctx.fillStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
-            ctx.lineWidth = brushSize;
-            
-            if (brushType === 'pen') {
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
+        function toggleThemeMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme_preference', 'light');
             } else {
-                ctx.lineCap = 'square';
-                ctx.lineJoin = 'miter';
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme_preference', 'dark');
             }
         }
 
-        // Transforms standard browser viewport space points into rotated internal localized matrix points
-        function getCanvasCoordinates(e) {
-            const rect = canvas.getBoundingClientRect();
-            
-            // Client mouse positions relative to canvas top-left bounding window
-            const clientX = e.clientX - rect.left;
-            const clientY = e.clientY - rect.top;
-            
-            // Find radius vectors extending from canvas center pivot point
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const dx = clientX - centerX;
-            const dy = clientY - centerY;
-            
-            // Reverse engineering transformation to map mouse vectors past current system angle
-            const rad = -currentAngle * Math.PI / 180;
-            const rotatedX = dx * Math.cos(rad) - dy * Math.sin(rad) + centerX;
-            const rotatedY = dx * Math.sin(rad) + dy * Math.cos(rad) + centerY;
-            
-            return { x: rotatedX, y: rotatedY };
-        }
-
-        // Drawing Action Triggers
-        function startDrawing(e) {
-            isDrawing = true;
-            const coords = getCanvasCoordinates(e);
-            lastX = coords.x;
-            lastY = coords.y;
-
-            // Handle discrete initial clicks instantly for block stamps
-            if (brushType === 'block') {
-                ctx.beginPath();
-                ctx.fillRect(coords.x - brushSize/2, coords.y - brushSize/2, brushSize, brushSize);
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme_preference');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
             } else {
-                ctx.beginPath();
-                ctx.arc(coords.x, coords.y, brushSize / 2, 0, Math.PI * 2);
-                ctx.fill();
+                document.documentElement.classList.remove('dark');
             }
         }
 
-        function draw(e) {
-            if (!isDrawing) return;
-            const coords = getCanvasCoordinates(e);
-            
-            updateBrushSettings();
-            ctx.beginPath();
-
-            if (brushType === 'pen') {
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(coords.x, coords.y);
-                ctx.stroke();
-            } else {
-                // Connect blocks with continuous fills cleanly over velocity spaces
-                let steps = Math.max(Math.abs(coords.x - lastX), Math.abs(coords.y - lastY));
-                for (let i = 0; i < steps; i++) {
-                    let t = i / steps;
-                    let currX = lastX + (coords.x - lastX) * t;
-                    let currY = lastY + (coords.y - lastY) * t;
-                    ctx.fillRect(currX - brushSize/2, currY - brushSize/2, brushSize, brushSize);
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    user_data = JSON.parse(stored);
+                } catch (e) {
+                    console.error("Failed parsing configurations.", e);
                 }
-                ctx.fillRect(coords.x - brushSize/2, coords.y - brushSize/2, brushSize, brushSize);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(user_data));
+        }
+
+        function renderContainer(htmlContent) {
+            document.getElementById('app-content').innerHTML = htmlContent;
+        }
+
+        function showOnboardingPage() {
+            let ageOptions = "";
+            for (let i = 5; i <= 90; i++) {
+                ageOptions += `<option value="${i}" ${i === 16 ? 'selected' : ''}>${i}</option>`;
             }
 
-            lastX = coords.x;
-            lastY = coords.y;
-        }
-
-        function stopDrawing() {
-            isDrawing = false;
-        }
-
-        // Animation Frame Engine loop tracking rotational shifts cleanly
-        function updateRotationLoop(timestamp) {
-            const delta = (timestamp - lastFrameTime) / 1000; // time conversion delta
-            lastFrameTime = timestamp;
-
-            if (rotationSpeed !== 0) {
-                currentAngle += rotationSpeed * delta;
-                currentAngle %= 360;
-                rotationWrapper.style.transform = `rotate(${currentAngle}deg)`;
+            let weightOptions = "";
+            for (let i = 30; i <= 160; i++) {
+                weightOptions += `<option value="${i}" ${i === 75 ? 'selected' : ''}>${i}</option>`;
             }
 
-            requestAnimationFrame(updateRotationLoop);
+            const html = `
+                <div class="flex-1 flex flex-col justify-center">
+                    <h2 class="text-2xl font-bold text-center mb-1 text-slate-800 dark:text-white">Welcome! Let's get set up</h2>
+                    <p class="text-xs text-center italic text-slate-400 dark:text-slate-500 mb-8">*Note: There is no age requirement to use this app.</p>
+                    
+                    <div class="space-y-5 max-w-md mx-auto w-full">
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5 text-slate-600 dark:text-slate-300">Select your Age:</label>
+                            <select id="onboard-age" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">${ageOptions}</select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5 text-slate-600 dark:text-slate-300">Select your Rider Weight (with riding gear):</label>
+                            <div class="flex gap-2">
+                                <select id="onboard-weight" class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">${weightOptions}</select>
+                                <select id="onboard-unit" class="w-24 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                    <option value="kg">kg</option>
+                                    <option value="lbs">lbs</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-6">
+                    <button onclick="handleOnboardingSubmit()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow">Complete Setup</button>
+                </div>
+            `;
+            renderContainer(html);
         }
 
-        // Control Node Triggers & UI Interaction Events
-        penModeBtn.addEventListener('click', () => {
-            brushType = 'pen';
-            penModeBtn.classList.add('active');
-            blockModeBtn.classList.remove('active');
-        });
+        function showEditProfilePage() {
+            let ageOptions = "";
+            for (let i = 5; i <= 90; i++) {
+                ageOptions += `<option value="${i}" ${user_data.age == i ? 'selected' : ''}>${i}</option>`;
+            }
 
-        blockModeBtn.addEventListener('click', () => {
-            brushType = 'block';
-            blockModeBtn.classList.add('active');
-            penModeBtn.classList.remove('active');
-        });
+            let weightOptions = "";
+            for (let i = 30; i <= 160; i++) {
+                weightOptions += `<option value="${i}" ${user_data.weight_value == i ? 'selected' : ''}>${i}</option>`;
+            }
 
-        drawToolBtn.addEventListener('click', () => {
-            currentTool = 'draw';
-            drawToolBtn.classList.add('active');
-            eraserToolBtn.classList.remove('active');
-        });
+            const html = `
+                <div class="flex-1 flex flex-col justify-center">
+                    <h2 class="text-2xl font-bold text-center mb-8 text-slate-800 dark:text-white">Update Rider Profile</h2>
+                    
+                    <div class="space-y-5 max-w-md mx-auto w-full">
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5 text-slate-600 dark:text-slate-300">Select your Age:</label>
+                            <select id="edit-age" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">${ageOptions}</select>
+                        </div>
 
-        eraserToolBtn.addEventListener('click', () => {
-            currentTool = 'eraser';
-            eraserToolBtn.classList.add('active');
-            drawToolBtn.classList.remove('active');
-        });
+                        <div>
+                            <label class="block text-sm font-medium mb-1.5 text-slate-600 dark:text-slate-300">Select your Rider Weight (with riding gear):</label>
+                            <div class="flex gap-2">
+                                <select id="edit-weight" class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">${weightOptions}</select>
+                                <select id="edit-unit" class="w-24 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                    <option value="kg" ${user_data.weight_unit === 'kg' ? 'selected' : ''}>kg</option>
+                                    <option value="lbs" ${user_data.weight_unit === 'lbs' ? 'selected' : ''}>lbs</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-6">
+                    <button onclick="showHomePage()" class="flex-1 bg-slate-500 hover:bg-slate-600 text-white font-bold py-2.5 px-4 rounded-lg transition-colors">Cancel</button>
+                    <button onclick="handleSaveProfileSubmit()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg transition-colors">Save Profile</button>
+                </div>
+            `;
+            renderContainer(html);
+        }
 
-        colorPalette.addEventListener('input', (e) => {
-            currentColor = e.target.value;
-            colorValue.textContent = currentColor.toUpperCase();
-            // Swap back over to draw automatically upon pick
-            currentTool = 'draw';
-            drawToolBtn.classList.add('active');
-            eraserToolBtn.classList.remove('active');
-        });
+        function showHomePage() {
+            let bikesHTML = "";
+            
+            if (!user_data.bikes || user_data.bikes.length === 0) {
+                bikesHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-center">
+                        <p class="text-sm italic text-slate-400 dark:text-slate-500">Your garage is empty. Add a bike to view tuning configs!</p>
+                    </div>
+                `;
+            } else {
+                bikesHTML = `<div class="space-y-3">`;
+                user_data.bikes.forEach((bike, index) => {
+                    bikesHTML += `
+                        <div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+                            <div onclick="showTuningDetailPage(${index})" class="flex items-center gap-4 flex-1 cursor-pointer">
+                                <div class="w-16 h-12 bg-slate-300 dark:bg-slate-600 rounded flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    ${bike.image_data ? `<img src="${bike.image_data}" class="w-full h-full object-cover">` : `<span class="text-xs font-semibold text-slate-500 dark:text-slate-400">[No Photo]</span>`}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">${bike.name}</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">${bike.fork_brand} | ${bike.frame_type} | ${bike.riding_style}</p>
+                                </div>
+                            </div>
+                            <button onclick="handleDeleteBike(${index})" class="text-sm bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-950/30 dark:hover:bg-red-900/50 dark:text-red-400 font-bold w-8 h-8 rounded-lg flex items-center justify-center transition-colors ml-2">✕</button>
+                        </div>
+                    `;
+                });
+                bikesHTML += `</div>`;
+            }
 
-        brushSizeInput.addEventListener('input', (e) => {
-            brushSize = parseInt(e.target.value);
-            sizeVal.textContent = brushSize + 'px';
-        });
+            const html = `
+                <div class="flex flex-col h-full flex-1 justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white">Your Bike Garage</h3>
+                            <div>
+                                <button onclick="showEditProfilePage()" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1.5 rounded transition-colors mr-20">Edit Profile</button>
+                            </div>
+                        </div>
+                        
+                        <div class="overflow-y-auto max-h-[380px] pr-1 mb-4">
+                            ${bikesHTML}
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button onclick="showAddBikePage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition-colors">+ Add New Bike</button>
+                    </div>
+                </div>
+            `;
+            renderContainer(html);
+        }
 
-        rotSpeedInput.addEventListener('input', (e) => {
-            rotationSpeed = parseInt(e.target.value);
-            speedVal.textContent = rotationSpeed + '°/s';
-        });
+        function showAddBikePage() {
+            const html = `
+                <div class="flex-1 flex flex-col justify-center">
+                    <h2 class="text-xl font-bold text-center mb-6 text-slate-800 dark:text-white">Configure New Bike</h2>
+                    
+                    <div class="space-y-4 max-w-md mx-auto w-full">
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Upload Bike Photo (Optional):</label>
+                            <input type="file" id="bike-image" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-slate-700 dark:file:text-slate-200">
+                        </div>
 
-        resetRotationBtn.addEventListener('click', () => {
-            rotationSpeed = 0;
-            rotSpeedInput.value = 0;
-            speedVal.textContent = '0°/s';
-            currentAngle = 0;
-            rotationWrapper.style.transform = `rotate(0deg)`;
-        });
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Bike Nickname:</label>
+                            <input type="text" id="bike-name" placeholder="e.g. My DH Rig, Custom DJ" class="w-full text-sm rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                        </div>
 
-        clearBtn.addEventListener('click', () => {
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        });
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Select Terrain / Riding Style:</label>
+                            <select id="bike-style" class="w-full text-sm rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                <option value="Balanced Trails">Balanced Trails</option>
+                                <option value="Soft Trails / Mud">Soft Trails / Mud</option>
+                                <option value="Big Jumps / Drops">Big Jumps / Drops</option>
+                                <option value="Downhill (DH Race)">Downhill (DH Race)</option>
+                                <option value="Dirt Jump (DJ / Pump Track)">Dirt Jump (DJ / Pump Track)</option>
+                                <option value="Enduro / Technical">Enduro / Technical</option>
+                                <option value="Freeride">Freeride</option>
+                            </select>
+                        </div>
 
-        // Pointer event mappings
-        canvas.addEventListener('mousedown', startDrawing);
-        window.addEventListener('mousemove', draw);
-        window.addEventListener('mouseup', stopDrawing);
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Front Fork Brand:</label>
+                            <select id="bike-fork" class="w-full text-sm rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                <option value="Fox">Fox</option>
+                                <option value="RockShox">RockShox</option>
+                                <option value="Ohlins">Ohlins</option>
+                                <option value="Marzocchi">Marzocchi</option>
+                                <option value="Suntour">Suntour</option>
+                                <option value="Manitou">Manitou</option>
+                            </select>
+                        </div>
 
-        // Window Initialization 
-        window.addEventListener('load', () => {
-            initCanvas();
-            requestAnimationFrame(updateRotationLoop);
-        });
+                        <div>
+                            <label class="block text-xs font-medium mb-1.5 text-slate-600 dark:text-slate-300">Frame Layout Type:</label>
+                            <div class="flex gap-2 p-1 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                                <button type="button" id="btn-hardtail" onclick="toggleShockField('Hardtail')" class="flex-1 py-1 text-xs font-medium rounded-md transition-colors bg-blue-600 text-white shadow">Hardtail</button>
+                                <button type="button" id="btn-fullsusp" onclick="toggleShockField('Full Suspension')" class="flex-1 py-1 text-xs font-medium rounded-md transition-colors text-slate-700 dark:text-slate-300">Full Suspension</button>
+                            </div>
+                            <input type="hidden" id="bike-frame" value="Hardtail">
+                        </div>
+
+                        <div id="shock-brand-wrapper" class="hidden">
+                            <label class="block text-xs font-medium mb-1 text-slate-600 dark:text-slate-300">Rear Shock Brand:</label>
+                            <select id="bike-shock" class="w-full text-sm rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-white">
+                                <option value="Fox">Fox</option>
+                                <option value="RockShox">RockShox</option>
+                                <option value="Ohlins">Ohlins</option>
+                                <option value="Marzocchi">Marzocchi</option>
+                                <option value="Cane Creek">Cane Creek</option>
+                                <option value="DVO">DVO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-6">
+                    <button onclick="showHomePage()" class="flex-1 bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm">Cancel</button>
+                    <button onclick="handleCreateBikeSubmit()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm">Save Bike</button>
+                </div>
+            `;
+            renderContainer(html);
+        }
+
+        function toggleShockField(selection) {
+            document.getElementById('bike-frame').value = selection;
+            const shockWrapper = document.getElementById('shock-brand-wrapper');
+            const btnHardtail = document.getElementById('btn-hardtail');
+            const btnFullSusp = document.getElementById('btn-fullsusp');
+            
+            if (selection === "Full Suspension") {
+                shockWrapper.classList.remove('hidden');
+                btnFullSusp.className = "flex-1 py-1 text-xs font-medium rounded-md transition-colors bg-blue-600 text-white shadow";
+                btnHardtail.className = "flex-1 py-1 text-xs font-medium rounded-md transition-colors text-slate-700 dark:text-slate-300";
+            } else {
+                shockWrapper.classList.add('hidden');
+                btnHardtail.className = "flex-1 py-1 text-xs font-medium rounded-md transition-colors bg-blue-600 text-white shadow";
+                btnFullSusp.className = "flex-1 py-1 text-xs font-medium rounded-md transition-colors text-slate-700 dark:text-slate-300";
+            }
+        }
+
+        function showTuningDetailPage(bikeIndex) {
+            const bike = user_data.bikes[bikeIndex];
+            let weight = user_data.weight_value;
+            if (user_data.weight_unit === "lbs") {
+                weight = weight * 0.453592;
+            }
+            
+            const style = bike.riding_style;
+            
+            let fork_psi = 0;
+            let fork_rebound = 0;
+            const brand_fork = bike.fork_fork || bike.fork_brand;
+            
+            if (brand_fork === "Fox") {
+                fork_psi = Math.floor(weight * 1.05);
+                fork_rebound = 8;
+            } else if (brand_fork === "RockShox") {
+                fork_psi = Math.floor(weight * 0.95);
+                fork_rebound = 6;
+            } else if (brand_fork === "Ohlins") {
+                fork_psi = Math.floor(weight * 1.2);
+                fork_rebound = 12;
+            } else {
+                fork_psi = Math.floor(weight * 1.1);
+                fork_rebound = 7;
+            }
+            
+            if (style === "Soft Trails / Mud") {
+                fork_psi -= 6;
+                fork_rebound += 1;
+            } else if (style === "Big Jumps / Drops") {
+                fork_psi += 10;
+                fork_rebound -= 1;
+            } else if (style === "Downhill (DH Race)") {
+                fork_psi += 5;
+                fork_rebound -= 1;
+            } else if (style === "Dirt Jump (DJ / Pump Track)") {
+                fork_psi = Math.max(fork_psi + 25, 140);
+                fork_rebound = Math.max(fork_rebound - 2, 3);
+            } else if (style === "Enduro / Technical") {
+                fork_psi += 2;
+            } else if (style === "Freeride") {
+                fork_psi += 12;
+                fork_rebound -= 1;
+            }
+            
+            let fork_bars = (fork_psi * 0.0689476).toFixed(2);
+
+            let shockHTML = "";
+            if (bike.frame_type === "Full Suspension") {
+                let shock_psi = 0;
+                let shock_rebound = 0;
+                const brand_shock = bike.shock_brand;
+                
+                if (brand_shock === "Fox") {
+                    shock_psi = Math.floor(weight * 2.7);
+                    shock_rebound = 6;
+                } else if (brand_shock === "RockShox") {
+                    shock_psi = Math.floor(weight * 2.9);
+                    shock_rebound = 5;
+                } else if (brand_shock === "Ohlins") {
+                    shock_psi = Math.floor(weight * 2.5);
+                    shock_rebound = 8;
+                } else {
+                    shock_psi = Math.floor(weight * 2.8);
+                    shock_rebound = 5;
+                }
+                
+                if (style === "Soft Trails / Mud") {
+                    shock_psi -= 12;
+                    shock_rebound += 1;
+                } else if (style === "Big Jumps / Drops") {
+                    shock_psi += 20;
+                    shock_rebound -= 1;
+                } else if (style === "Downhill (DH Race)") {
+                    shock_psi += 10;
+                    shock_rebound -= 1;
+                } else if (style === "Dirt Jump (DJ / Pump Track)") {
+                    shock_psi = Math.max(shock_psi + 35, 220);
+                    shock_rebound = Math.max(shock_rebound - 2, 2);
+                } else if (style === "Enduro / Technical") {
+                    shock_psi += 5;
+                } else if (style === "Freeride") {
+                    shock_psi += 25;
+                    shock_rebound -= 1;
+                }
+                
+                let shock_bars = (shock_psi * 0.0689476).toFixed(2);
+
+                shockHTML = `
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+                        <h4 class="font-bold text-blue-600 dark:text-blue-400 text-sm mb-2">Rear Shock Setup (${bike.shock_brand})</h4>
+                        <ul class="text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                            <li><strong>• Air Pressure:</strong> ${shock_psi} PSI (${shock_bars} Bars)</li>
+                            <li><strong>• Rebound Damping:</strong> ${shock_rebound} Clicks from fully closed</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            const html = `
+                <div class="flex flex-col h-full flex-1 justify-between">
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-bold text-center text-slate-800 dark:text-white">${bike.name} Specs</h2>
+                        
+                        ${bike.image_data ? `
+                            <div class="w-40 h-28 mx-auto bg-slate-200 dark:bg-slate-700 rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 shadow-inner">
+                                <img src="${bike.image_data}" class="w-full h-full object-cover">
+                            </div>
+                        ` : ''}
+
+                        <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-600">
+                            <h4 class="font-bold text-blue-600 dark:text-blue-400 text-sm mb-2">Front Fork Setup (${bike.fork_brand})</h4>
+                            <ul class="text-xs space-y-1 text-slate-700 dark:text-slate-300">
+                                <li><strong>• Air Pressure:</strong> ${fork_psi} PSI (${fork_bars} Bars)</li>
+                                <li><strong>• Rebound Damping:</strong> ${fork_rebound} Clicks from fully closed</li>
+                            </ul>
+                        </div>
+
+                        ${shockHTML}
+                    </div>
+
+                    <div class="pt-6">
+                        <button onclick="showHomePage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">&amp;larr; Back to Garage</button>
+                    </div>
+                </div>
+            `;
+            renderContainer(html);
+        }
+
+        function handleOnboardingSubmit() {
+            user_data.age = document.getElementById('onboard-age').value;
+            user_data.weight_value = parseInt(document.getElementById('onboard-weight').value);
+            user_data.weight_unit = document.getElementById('onboard-unit').value;
+            user_data.onboarding_complete = true;
+            saveData();
+            showHomePage();
+        }
+
+        function handleSaveProfileSubmit() {
+            user_data.age = document.getElementById('edit-age').value;
+            user_data.weight_value = parseInt(document.getElementById('edit-weight').value);
+            user_data.weight_unit = document.getElementById('edit-unit').value;
+            saveData();
+            showHomePage();
+        }
+
+        function handleCreateBikeSubmit() {
+            const nameInput = document.getElementById('bike-name').value.trim();
+            if (!nameInput) {
+                alert("Please enter a bike nickname.");
+                return;
+            }
+
+            const files = document.getElementById('bike-image').files;
+            const newBike = {
+                name: nameInput,
+                riding_style: document.getElementById('bike-style').value,
+                fork_brand: document.getElementById('bike-fork').value,
+                frame_type: document.getElementById('bike-frame').value,
+                shock_brand: document.getElementById('bike-frame').value === "Full Suspension" ? document.getElementById('bike-shock').value : "None",
+                image_data: null
+            };
+
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    newBike.image_data = reader.result;
+                    user_data.bikes.push(newBike);
+                    saveData();
+                    showHomePage();
+                }
+                reader.readAsDataURL(files)[0];
+            } else {
+                user_data.bikes.push(newBike);
+                saveData();
+                showHomePage();
+            }
+        }
+
+        function handleDeleteBike(index) {
+            if (confirm("Are you sure you want to remove this bike from your garage?")) {
+                user_data.bikes.splice(index, 1);
+                saveData();
+                showHomePage();
+            }
+        }
+
+        function handleResetApp() {
+            if (confirm("This will wipe all data. Proceed?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                user_data = {
+                    onboarding_complete: false,
+                    age: "16",
+                    weight_value: 75,
+                    weight_unit: "kg",
+                    bikes: []
+                };
+                showOnboardingPage();
+            }
+        }
+
+        window.onload = function() {
+            initTheme();
+            loadData();
+            
+            if (user_data.onboarding_complete) {
+                showHomePage();
+            } else {
+                showOnboardingPage();
+            }
+        };
     </script>
-
 
 </body></html>
