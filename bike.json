@@ -1,0 +1,38 @@
+[
+  {
+    "id": "norco-sight-2026",
+    "brand": "Norco",
+    "model": "Sight Gen5 29",
+    "year": 2026,
+    "geometry": {
+      "reach": 455,
+      "stack": 625,
+      "head_angle": 64.0,
+      "seat_angle": 77.5,
+      "wheel_size": "29"
+    },
+    "stock_specs": {
+      "fork": "RockShox Lyrik (160mm)",
+      "shock": "RockShox Super Deluxe",
+      "brakes": "SRAM Code R"
+    }
+  },
+  {
+    "id": "santa-cruz-hightower-2025",
+    "brand": "Santa Cruz",
+    "model": "Hightower V4",
+    "year": 2025,
+    "geometry": {
+      "reach": 472,
+      "stack": 631,
+      "head_angle": 64.5,
+      "seat_angle": 76.4,
+      "wheel_size": "29"
+    },
+    "stock_specs": {
+      "fork": "Fox 36 Performance (150mm)",
+      "shock": "Fox Float X",
+      "brakes": "SRAM Stealth Bronze"
+    }
+  }
+]
